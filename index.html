@@ -10,21 +10,92 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>-->
     <style>
-    html {
-        height: 100%;
+    html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: #fff;
     }
-    body {
+    #content {
         height: 100%;
-        padding: 0;
-        margin: 0;
+        width: 30%;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
     #map {
-        width: 100%;
         height: 100%;
+        width: 70%;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    h2, h4 {
+        text-align: center;
+    }
+    #wrapper {
+        padding: 0.5em;
+    }
+    #creds {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 0.5em;
+        text-align: center;
+        width: 100%;
+    }
+    ul {
+        font-size: 85%;
     }
     </style>
 </head>
 <body>
+    <div id="content">
+        <div id="wrapper">
+            <h2>Rodanthe Shoreline Erosion</h2>
+            <h4>2010&mdash;2020, Hatteras National Seashore, Outer Banks, NC</h4>
+            <p>This map does things...</p>
+            <p>Some more information...</p>
+            <p><b>Sources:</b></p>
+            <ul>
+                <li><a href="https://apnews.com/article/environment-north-carolina-national-park-service-950b7804ae04d5798665429cc5afa226">2 North Carolina houses collapse into Atlantic surf</a>&mdash;AP News (2022)</li>
+                <li><a href="https://www.washingtonpost.com/climate-environment/interactive/2023/obx-rodanthe-erosion-rising-sea-levels/">Retreat in Rodanthe</a>&mdash;Washington Post (2023)</li>
+                <li><a href="https://pubs.usgs.gov/of/2015/1002/pdf/ofr2015-1002.pdf">Quantification of Shoreline Change Along Hatteras Island</a>&mdash;USGS (2015)</li>
+            </ul>
+        </div>
+        <small id="creds">Map by <a href="https://rivermont.xyz">Will Bennett</a>, source code available <a href="https://github.com/rivermont/rodanthe-erosion">on GitHub</a>.</small>
+    </div>
     <div id="map"></div>
+    <script>
+    var map = L.map('map', {
+        center: [35.6, -75.46],  // map is moved to data bounds later
+        zoom: 15,
+        maxZoom: 18,
+        minZoom: 9,
+        detectRetina: true
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: 'Basemap style &copy; CartoDB | Basemap data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    }).addTo(map);
+
+    L.control.scale({position: 'bottomleft'}).addTo(map);
+
+    // disappear1993 = L.geoJson.ajax('./data/disappear1993.geojson').addTo(map);
+    // disappear1998 = L.geoJson.ajax('./data/disappear1998.geojson').addTo(map);
+    // disappear2010 = L.geoJson.ajax('./data/disappear2010.geojson').addTo(map);
+    disappear2012 = L.geoJson.ajax('./data/disappear2012.geojson', {style: {
+        weight: 1,
+        opacity: 0.7,
+        color: 'red',}}).addTo(map);
+    // disappear2016 = L.geoJson.ajax('./data/disappear2016.geojson').addTo(map);
+    // disappear2020 = L.geoJson.ajax('./data/disappear2020.geojson').addTo(map);
+
+    // shoreline1993 = L.geoJson.ajax('./data/shoreline1993.geojson').addTo(map);
+    // shoreline1998 = L.geoJson.ajax('./data/shoreline1998.geojson').addTo(map);
+    shoreline2010 = L.geoJson.ajax('./data/shoreline2010.geojson').addTo(map);
+    // shoreline2012 = L.geoJson.ajax('./data/shoreline2012.geojson').addTo(map);
+    // shoreline2016 = L.geoJson.ajax('./data/shoreline2016.geojson').addTo(map);
+    shoreline2020 = L.geoJson.ajax('./data/shoreline2020.geojson').addTo(map);
+    </script>
 </body>
 </html>
