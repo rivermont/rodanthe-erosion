@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
     <style>
     html, body {
     width: 100%;
@@ -61,6 +61,11 @@
                 <li><a href="https://www.washingtonpost.com/climate-environment/interactive/2023/obx-rodanthe-erosion-rising-sea-levels/">Retreat in Rodanthe</a>&mdash;Washington Post (2023)</li>
                 <li><a href="https://pubs.usgs.gov/of/2015/1002/pdf/ofr2015-1002.pdf">Quantification of Shoreline Change Along Hatteras Island</a>&mdash;USGS (2015)</li>
             </ul>
+            <div style="width: 60%; text-align: center;">
+                <video height="420vh" autoplay muted>
+                    <source src="file_720x1280-2000.mp4" type="video/mp4">
+                </video>
+            </div>
             <!-- Video sourced from Cape Hatteras National Seashore/Storyful -->
         </div>
         <small id="creds">Map by <a href="https://rivermont.xyz">Will Bennett</a>, source code available <a href="https://github.com/rivermont/rodanthe-erosion">on GitHub</a>.</small>
@@ -68,37 +73,88 @@
     <div id="map"></div>
     <script>
     var map = L.map('map', {
-        center: [35.594, -75.455],  // map is moved to data bounds later
-        zoom: 15,
-        maxZoom: 18,
+        center: [35.601, -75.46],
+        zoom: 16,
+        maxZoom: 19,
         minZoom: 8,
         detectRetina: true
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-        attribution: 'Basemap style &copy; CartoDB | Basemap data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    // TODO: toggle between basemaps
+    // https://leafletjs.com/examples/layers-control/
+
+    // L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    //     attribution: 'Basemap style &copy; CartoDB | Basemap data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    // }).addTo(map);
+
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	    // attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        attribution: 'Tiles &copy; Esri'
     }).addTo(map);
+
 
     L.control.scale({position: 'bottomleft'}).addTo(map);
 
-    disappear1998 = L.geoJson.ajax('./data/disappear1998.geojson').addTo(map);
-    disappear2010 = L.geoJson.ajax('./data/disappear2010.geojson').addTo(map);
+    colors = chroma.scale('OrRd').colors(7);
+
+    shoreline1993 = L.geoJson.ajax('./data/shoreline1993.geojson', {style: {
+            color: colors[2],
+            opacity: 0.6,
+            weight: 2
+        }}).addTo(map);
+    shoreline1998 = L.geoJson.ajax('./data/shoreline1998.geojson', {style: {
+            color: colors[3],
+            opacity: 0.6,
+            weight: 2
+        }}).addTo(map);
+    shoreline2010 = L.geoJson.ajax('./data/shoreline2010.geojson', {style: {
+            color: colors[4],
+            opacity: 0.6,
+            weight: 2
+        }}).addTo(map);
+    shoreline2012 = L.geoJson.ajax('./data/shoreline2012.geojson', {style: {
+            color: colors[5],
+            opacity: 0.6,
+            weight: 2
+        }}).addTo(map);
+    shoreline2016 = L.geoJson.ajax('./data/shoreline2016.geojson', {style: {
+            color: colors[6],
+            opacity: 0.6,
+            weight: 2
+        }}).addTo(map);
+    shoreline2020 = L.geoJson.ajax('./data/shoreline2020.geojson', {style: {
+            color: colors[7],
+            opacity: 0.6,
+            weight: 2
+        }}).addTo(map);
+
+    disappear1998 = L.geoJson.ajax('./data/disappear1998.geojson', {style: {
+            color: colors[2],
+            opacity: 0.6
+        }}).addTo(map);
+    disappear2010 = L.geoJson.ajax('./data/disappear2010.geojson', {style: {
+            color: colors[3],
+            opacity: 0.6
+        }}).addTo(map);
     disappear2012 = L.geoJson.ajax('./data/disappear2012.geojson', {style: {
-        weight: 1,
-        opacity: 0.7,
-        color: 'red',}}).addTo(map);
-    disappear2016 = L.geoJson.ajax('./data/disappear2016.geojson').addTo(map);
+            color: colors[4],
+            opacity: 0.6
+        }}).addTo(map);
+    disappear2016 = L.geoJson.ajax('./data/disappear2016.geojson', {style: {
+            color: colors[5],
+            opacity: 0.6
+        }}).addTo(map);
     // disappear2020 = L.geoJson.ajax('./data/disappear2020.geojson').addTo(map);
-    disappear2023 = L.geoJson.ajax('./data/disappear2023.geojson').addTo(map);
+    disappear2023 = L.geoJson.ajax('./data/disappear2023.geojson', {style: {
+            color: colors[6],
+            opacity: 0.6
+        }}).addTo(map);
 
-    threatened = L.geoJson.ajax('./data/threatened.geojson').addTo(map);
+    threatened = L.geoJson.ajax('./data/threatened.geojson', {style: {
+            color: 'Green',
+            opacity: 0.6
+        }}).addTo(map);
 
-    shoreline1993 = L.geoJson.ajax('./data/shoreline1993.geojson').addTo(map);
-    shoreline1998 = L.geoJson.ajax('./data/shoreline1998.geojson').addTo(map);
-    shoreline2010 = L.geoJson.ajax('./data/shoreline2010.geojson').addTo(map);
-    shoreline2012 = L.geoJson.ajax('./data/shoreline2012.geojson').addTo(map);
-    shoreline2016 = L.geoJson.ajax('./data/shoreline2016.geojson').addTo(map);
-    shoreline2020 = L.geoJson.ajax('./data/shoreline2020.geojson').addTo(map);
     </script>
 </body>
 </html>
