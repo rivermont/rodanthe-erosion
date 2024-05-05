@@ -81,21 +81,23 @@
 
     L.control.scale({position: 'bottomleft'}).addTo(map);
 
-    // disappear1993 = L.geoJson.ajax('./data/disappear1993.geojson').addTo(map);
-    // disappear1998 = L.geoJson.ajax('./data/disappear1998.geojson').addTo(map);
-    // disappear2010 = L.geoJson.ajax('./data/disappear2010.geojson').addTo(map);
+    disappear1998 = L.geoJson.ajax('./data/disappear1998.geojson').addTo(map);
+    disappear2010 = L.geoJson.ajax('./data/disappear2010.geojson').addTo(map);
     disappear2012 = L.geoJson.ajax('./data/disappear2012.geojson', {style: {
         weight: 1,
         opacity: 0.7,
         color: 'red',}}).addTo(map);
     disappear2016 = L.geoJson.ajax('./data/disappear2016.geojson').addTo(map);
     // disappear2020 = L.geoJson.ajax('./data/disappear2020.geojson').addTo(map);
+    disappear2023 = L.geoJson.ajax('./data/disappear2023.geojson').addTo(map);
 
-    // shoreline1993 = L.geoJson.ajax('./data/shoreline1993.geojson').addTo(map);
-    // shoreline1998 = L.geoJson.ajax('./data/shoreline1998.geojson').addTo(map);
+    threatened = L.geoJson.ajax('./data/threatened.geojson').addTo(map);
+
+    shoreline1993 = L.geoJson.ajax('./data/shoreline1993.geojson').addTo(map);
+    shoreline1998 = L.geoJson.ajax('./data/shoreline1998.geojson').addTo(map);
     shoreline2010 = L.geoJson.ajax('./data/shoreline2010.geojson').addTo(map);
-    // shoreline2012 = L.geoJson.ajax('./data/shoreline2012.geojson').addTo(map);
-    // shoreline2016 = L.geoJson.ajax('./data/shoreline2016.geojson').addTo(map);
+    shoreline2012 = L.geoJson.ajax('./data/shoreline2012.geojson').addTo(map);
+    shoreline2016 = L.geoJson.ajax('./data/shoreline2016.geojson').addTo(map);
     shoreline2020 = L.geoJson.ajax('./data/shoreline2020.geojson').addTo(map);
     </script>
 </body>
