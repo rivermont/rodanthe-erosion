@@ -46,6 +46,29 @@
     ul {
         font-size: 85%;
     }
+    #video-wrapper {
+        float: right;
+        text-align: center;
+        padding-left: 1em;
+    }
+
+    /* Legend styling */
+    #legend {
+        position: absolute;
+        bottom: 10vh;
+        right: 5em;
+        float: right;
+        text-align: right;
+    }
+    #legend i {
+        display: inline-block;
+        width: 16px;
+        height: 14px;
+        opacity: 0.9;
+        border-style: solid;
+        border-width: 1px;
+        margin-left: 6px;
+    }
     </style>
 </head>
 <body>
@@ -53,28 +76,39 @@
         <div id="wrapper">
             <h2>Rodanthe Shoreline Erosion</h2>
             <h4>1993&mdash;2023, Hatteras National Seashore, Outer Banks, NC</h4>
-                <div id="video-wrapper" style="float: right; text-align: center;">
+            <div id="video-wrapper">
                 <video height="420vh" autoplay muted>
                     <source src="file_720x1280-2000.mp4" type="video/mp4">
                 </video><br>
                 <small>Cape Hatteras National Seashore/Storyful</small>
-                </div>
-                <p>Shoreline erosion is a problem facing many coastal communities around the world, either due to rising sea levels, changing ocean currents, or normal weather patterns.</p>
-            <p>This map does things...</p>
-            <p>Some more information...</p>
-            <p><b>Sources:</b></p>
+            </div>
+            <p>Shoreline erosion is a problem facing many coastal communities around the world, either due to rising sea levels, changing ocean currents, or normal weather patterns.
+               Expensive vacation homes are often built on shifting, unstable barrier islands like the Outer Banks of North Carolina.
+               Several blocks of homes in Rodanthe, a town on the Outer Banks, have started to collapse into the Atlantic Ocean in recent decades.</p>
+            <p>A study by the US Geological Survey in 2015 found that between 1978 and 2002, the shoreline on Hatteras Island retreated westward an average of 1.4 meters per year.
+               This rate of change had high variability however, with several areas (notably near Rodanthe) experienced rates of nearly 5 meters per year.</p>
+            <p>This map shows documented buildings that have been moved or fallen into the ocean as a result of a shifting shoreline, along with previous years' shorelines (estimated using the high water mark for available imagery).
+               Buildings and shoreline data were traced from <a href="https://www.nconemap.gov/pages/imagery" target="_blank">imagery layers</a> provided by NC OneMap.
+               The map will be updated once NC OneMap releases the coastal imagery being flown in 2024.</p>
+            <p><b>Other Sources:</b></p>
             <ul>
                 <li><a href="https://apnews.com/article/environment-north-carolina-national-park-service-950b7804ae04d5798665429cc5afa226">2 North Carolina houses collapse into Atlantic surf</a>&mdash;AP News (2022)</li>
                 <li><a href="https://www.washingtonpost.com/climate-environment/interactive/2023/obx-rodanthe-erosion-rising-sea-levels/">Retreat in Rodanthe</a>&mdash;Washington Post (2023)</li>
                 <li><a href="https://pubs.usgs.gov/of/2015/1002/pdf/ofr2015-1002.pdf">Quantification of Shoreline Change Along Hatteras Island</a>&mdash;USGS (2015)</li>
             </ul>
         </div>
-        <small id="creds">Map by <a href="https://rivermont.xyz">Will Bennett</a>, source code available <a href="https://github.com/rivermont/rodanthe-erosion">on GitHub</a>.</small>
+        <table id="legend">
+            <tr><th>Year</th></tr>
+            <tr><td id="legenditems"></td></tr>
+        </table>
+        <span id="creds"><small>Map by <a href="https://rivermont.xyz">Will Bennett</a>, source code available <a href="https://github.com/rivermont/rodanthe-erosion">on GitHub</a>.</small></span>
     </div>
     <div id="map"></div>
     <script>
     /*** Color Definitions ***/
     colors = chroma.scale('OrRd').colors(7);
+
+    var years = ['1993', '1998', '2010', '2012', '2016', '2020', '2023', 'Current'];
 
     var colorKey = {
         1993: colors[0],
@@ -84,7 +118,7 @@
         2016: colors[4],
         2020: colors[5],
         2023: colors[6],
-        'threatened': 'Green'
+        'Threatened': 'Green'
     };
 
     function shorelineStyle (year) {
@@ -103,11 +137,21 @@
         }
     }
 
+    /** Generate Legend **/
+
+    var legend = [];
+
+    for (var i in colorKey) {
+        legend.push(i + '<i style="background: ' + colorKey[i] + '"></i>');
+    }
+
+    $("#legenditems").html(legend.join('<br>'));
+
     /*** Leaflet Code ***/
     var map = L.map('map', {
         center: [35.601, -75.46],
         zoom: 16,
-        maxZoom: 19,
+        maxZoom: 18, // increase to 19 if using basemap
         minZoom: 11,
         detectRetina: true
     });
@@ -141,8 +185,7 @@
     // disappear2020 = L.geoJson.ajax('./data/disappear2020.geojson').addTo(map);
     disappear2023 = L.geoJson.ajax('./data/disappear2023.geojson', {style: buildingStyle(2023)}).addTo(map);
 
-    threatened = L.geoJson.ajax('./data/threatened.geojson', {style: buildingStyle('threatened')}).addTo(map);
-
+    threatened = L.geoJson.ajax('./data/threatened.geojson', {style: buildingStyle('Threatened')}).addTo(map);
     </script>
 </body>
 </html>
